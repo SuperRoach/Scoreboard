@@ -6,3 +6,6 @@ It's being created with Live Gaming Commentaries in Mind, and has the main featu
 - Sliding text
 
 Also eventually to be uploaded, is remote access, which is to allow the scoreboard act as either a slave or master to someone else, and receive or send updates from one machine or another. This is intended to allow the workload to be shifted to other people once you have the item set up.
+
+To setup, copy into a new folder and run.
+The AJAX related changes for remote updating and sending will require for you to have both a mysql db on the receiving Host.
