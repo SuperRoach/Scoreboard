@@ -48,23 +48,45 @@ $("#showscores").bind("click", function(e)
 	{
 		$("#sb_content .team_container").removeClass("alternate");
 	})	
+	$("#linear").bind("click", function(e)
+	{
+		$("#sb_content .team_container").removeClass("linear1").removeClass("linear2");
+	})	
+	$("#linear1").bind("click", function(e)
+	{
+		$("#sb_content .team_container").removeClass("linear2").addClass("linear1");
+	})	
+	$("#linear2").bind("click", function(e)
+	{
+		$("#sb_content .team_container").removeClass("linear1").addClass("linear2");
+	})	
 	$("#bumptext1").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump2,bump3").addClass("bump1");
+		$("#sb_content").removeClass("bump2 bump3 bump4 bump5").addClass("bump1");
 	})	
 	$("#bumptext2").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump1,bump3").addClass("bump2");
+		$("#sb_content").removeClass("bump1 bump3 bump4 bump5").addClass("bump2");
 	})	
 	$("#bumptext3").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump1,bump2").addClass("bump3");
+		$("#sb_content").removeClass("bump1 bump2 bump4 bump5").addClass("bump3");
+	})	
+	$("#bumptext4").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump1 bump3 bump2").addClass("bump4");
+	})		
+	$("#bumptext5").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump1 bump3 bump2 bump4").addClass("bump5");
 	})	
 	$("#originaltextpos").bind("click", function(e)
 	{
 		$("#sb_content").removeClass("bump1");
 		$("#sb_content").removeClass("bump2");
 		$("#sb_content").removeClass("bump3");
+		$("#sb_content").removeClass("bump4");
+		$("#sb_content").removeClass("bump5");
 	})	
 
 	$("#sizebumptext1").bind("click", function(e)
@@ -277,6 +299,9 @@ if (sending) {
 
 </script>
 <style type="text/css">
+#scoreboard {
+    position:relative; /* This is to allow abs positioning on child blocks */
+}
 
 #scoreboard {
 background:#00FF00 /* alpha map me */
@@ -346,6 +371,14 @@ border: 1px solid red !important;
 width:55%
 }
 
+#sb_text_container
+{
+position: absolute;
+width:100%;
+top:80%;
+}
+
+
 .team_container
 {
 width:150px
@@ -399,6 +432,36 @@ color:#FFF;
 font-family:arial;
 }
 
+#sb_team2_container.linear1
+{
+    float:none;
+}
+
+.linear1 #sb_team1_score, .linear1 #sb_team2_score
+{
+    float:left;
+}
+.linear1 #sb_team1_name, .linear1 #sb_team2_name
+{
+    margin-left:5px;
+    margin-right:10px;
+    float:left;
+}
+
+.linear2 #sb_team1_name, .linear2 #sb_team2_name
+{
+    margin-left:5px;
+    margin-right:10px;
+    float:left;
+}
+
+#sb_team2_container.linear2
+{
+    float:left;
+}
+
+
+
 .bump1
 {
 margin-top:5%;
@@ -413,6 +476,17 @@ margin-top:10%;
 {
 margin-top:25%;
 }
+
+.bump4
+{
+margin-top:29%;
+}
+
+.bump5
+{
+margin-top:33%;
+}
+
 
 /* Image background method */
 .imagebg #sb_team1_container
@@ -512,6 +586,7 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 		<li><a href="#tabs-scores">Team/Scores</a></li>
 		<li><a href="#tabs-delay">Delay</a></li>
 		<li><a href="#tabs-textsize">Board Size</a></li>
+		<li><a href="#tabs-textstyle">Text Style</a></li>
 		<li><a href="#tabs-textformatting">Text Format</a></li>
 		<li><a href="#tabs-textposition">Text Position</a></li>
 		<li><a href="#tabs-textbackground">Text Background</a></li>
@@ -553,11 +628,19 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	</fieldset>
 </div>
 
+<div id="tabs-textstyle">
+<fieldset>
+<legend>Text Style</legend>
+	<input type="button" id="originaltext" name="originaltext" value="Original Text Format" >
+	<input type="button" id="alternativetext" name="alternativetext" value="Alternative Text" >
+</fieldset>
+</div>
 <div id="tabs-textformatting">
 <fieldset>
 <legend>Text formatting</legend>
-	<input type="button" id="originaltext" name="originaltext" value="Original Text Format" >
-	<input type="button" id="alternativetext" name="alternativetext" value="Alternative Text" >
+	<input type="button" id="linear" name="linear" value="Left/Right Corners" >
+	<input type="button" id="linear1" name="linear1" value="linear layout stacked" >
+	<input type="button" id="linear2" name="linear2" value="one line layout" >
 </fieldset>
 </div>
 <div id="tabs-textposition">
@@ -567,6 +650,8 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 		<input type="button" id="bumptext1" name="bump1" value="Bump1" >
 		<input type="button" id="bumptext2" name="bump2" value="Bump2" >
 		<input type="button" id="bumptext3" name="bump3" value="Bump3" >
+		<input type="button" id="bumptext4" name="bump4" value="Bump4" >
+		<input type="button" id="bumptext5" name="bump5" value="Bump5" >
 	</fieldset>
 </div>
 <div id="tabs-background">
