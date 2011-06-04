@@ -1,8 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Project Honeymoon</title>
-		<script type="text/javascript" src="lib/jquery/jquery-1.5.2.min.js"></script>
+<title>Scoreboard</title>
+		<link type="text/css" href="lib/jqui/css/smoothness/jquery-ui-1.8.13.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="lib/jquery/jquery-1.5.2.min.js"></script>	
+		<script type="text/javascript" src="lib/jqui/js/jquery-ui-1.8.13.custom.min.js"></script>
 		<script type="text/javascript" src="lib/marquee/jquery.marquee.js"></script>
 		<script type="text/javascript" src="lib/jqueryshortcutslibrary/jquery.shortcuts.min.js"></script>
 
@@ -10,6 +12,7 @@
 sending = false;
 
 $(document).ready(function(){
+$("#teamdata").tabs();
 $("#showscores").bind("click", function(e)
 	{
 		$("#showscores").addClass("recording")
@@ -466,7 +469,7 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 </style>
 </head>
 <body>
-<h1>Project honeymoon</h1>
+<h1>Scoreboard</h1>
 <p>A project to help with dynamic scoreboards.</p>
 <p>To use, screen region the green backgrounded area, then chromakey it out.</p>
 <div id="scoreboard">
@@ -495,53 +498,78 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	</div>		
 </div>
 <div id="teamdata">
-<form name="teamdata" action="post">
-<label for="team1score" class="scorelabel">Team 1 score: </label>
-<input type="text" id="team1score" name="team1score" class="score" value="0" >
-<label for="team2score" class="scorelabel">Team 2 score: </label>
-<input type="text" id="team2score" name="team2score" class="score" value="0" >
-<div class="nameformatting">
-<label for="team1name">Team 1 name: </label>
-<input type="text" id="team1name" name="team1name" class="teamname" value="Randoms" >
-<label for="team2name">Team 2 name: </label>
-<input type="text" id="team2name" name="team2name" class="teamname" value="H*EA*T" >
+	<ul>
+		<li><a href="#tabs-scores">Team/Scores</a></li>
+		<li><a href="#tabs-delay">Delay</a></li>
+		<li><a href="#tabs-textformatting">Text Format</a></li>
+		<li><a href="#tabs-textsize">Text Position</a></li>
+		<li><a href="#tabs-textposition">Text Size</a></li>
+		<li><a href="#tabs-textbackground">Text Background</a></li>
+		<li><a href="#tabs-background">BG Color</a></li>
+		<li><a href="#tabs-remoteupdate">Remote Updates</a></li>
+		<li><a href="#tabs-experimental">Testing</a></li>
+	</ul>
+<div id ="tabs-scores">
+	<form name="teamdata" action="post">
+	<label for="team1score" class="scorelabel">Team 1 score: </label>
+	<input type="text" id="team1score" name="team1score" class="score" value="0" >
+	<label for="team2score" class="scorelabel">Team 2 score: </label>
+	<input type="text" id="team2score" name="team2score" class="score" value="0" >
+	<div class="nameformatting">
+	<label for="team1name">Team 1 name: </label>
+	<input type="text" id="team1name" name="team1name" class="teamname" value="Randoms" >
+	<label for="team2name">Team 2 name: </label>
+	<input type="text" id="team2name" name="team2name" class="teamname" value="H*EA*T" >
+	</div>
+	</form>
 </div>
-</form>
 <form name="teamoptions" action="post">
-<fieldset>
-<legend>Delays and show/hide</legend>
-<label for="delaytime">Delay time (in milliseconds - 1000 = 1 second): </label>
-<input type="text" id="delaytime" name="delaytime" class="delaytime" value="1800" >
-<input type="button" id="showscores" name="showscores" value="Show scoreboard till next change" >
-<input type="button" id="hidescores" name="hidescores" value="Hide scoreboard now" >
-</fieldset>
+<div id="tabs-delay">
+	<fieldset>
+	<legend>Delays and show/hide</legend>
+	<label for="delaytime">Delay time (in milliseconds - 1000 = 1 second): </label>
+	<input type="text" id="delaytime" name="delaytime" class="delaytime" value="1800" >
+	<input type="button" id="showscores" name="showscores" value="Show scoreboard till next change" >
+	<input type="button" id="hidescores" name="hidescores" value="Hide scoreboard now" >
+	</fieldset>
+</div>
+<div id="tabs-textformatting">
 <fieldset>
 <legend>Text formatting</legend>
 	<input type="button" id="originaltext" name="originaltext" value="Original Text Format" >
 	<input type="button" id="alternativetext" name="alternativetext" value="Alternative Text" >
+</fieldset>
+</div>
+<div id="tabs-textposition">
+	<fieldset>
+	<legend>Text position</legend>	
+		<input type="button" id="originaltextpos" name="originaltext" value="Original Position" >
+		<input type="button" id="bumptext1" name="bump1" value="Bump1" >
+		<input type="button" id="bumptext2" name="bump2" value="Bump2" >
+		<input type="button" id="bumptext3" name="bump3" value="Bump3" >
 	</fieldset>
-<fieldset>
-<legend>Text position</legend>	
-	<input type="button" id="originaltextpos" name="originaltext" value="Original Position" >
-	<input type="button" id="bumptext1" name="bump1" value="Bump1" >
-	<input type="button" id="bumptext2" name="bump2" value="Bump2" >
-	<input type="button" id="bumptext3" name="bump3" value="Bump3" >
-</fieldset>
-<fieldset>
-<legend>Text size</legend>
-	<input type="button" id="originaltextsize" name="originaltextsize" value="Original Size" >
-	<input type="button" id="sizebumptext1" name="sizebump1" value="360p" >
-	<input type="button" id="sizebumptext2" name="sizebump2" value="720p" >
-</fieldset>
+</div>
+<div id="tabs-textsize">
+	<fieldset>
+	<legend>Text size</legend>
+		<input type="button" id="originaltextsize" name="originaltextsize" value="Original Size" >
+		<input type="button" id="sizebumptext1" name="sizebump1" value="360p" >
+		<input type="button" id="sizebumptext2" name="sizebump2" value="720p" >
+	</fieldset>
+</div>
+<div id="tabs-background">
 <fieldset>
 <legend>Background color</legend>
 	<label for="bgcolor">In HEX (RRGGBB)</label><input type="text" id="bgcolor" name="bgcolor" value="00FF00" maxlength=6 >
 </fieldset>
+</div>
+<div id="tabs-textbackground">
 <fieldset>
 <legend>Background type</legend>
 	<input type="radio" checked name="bgtype" id="bgtype_none" value="none"> <label for="bgtype_none">None</label>
 	<input type="radio" name="bgtype" id="bgtype_standard" value="standard"> <label for="bgtype_standard">Standard</label>
 </fieldset>
+<div id="tabs-remoteupdate">
 <fieldset>
 <legend>Remote updates</legend>
 	<label for="bgcolor">Remote partner id: </label><input type="text" id="remoteid" name="delaytime" class="delaytime" maxlength=3 >
@@ -549,12 +577,15 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	<input type="radio" checked name="connecttype" id="connecttype_send" value="send"> <label for="connecttype_send">Send</label>
 	<input type="radio" name="connecttype" id="connecttype_receive" value="receive"> <label for="connecttype_receive">Receive</label>
 </fieldset>
+</div>
+<div id="tabs-experimental">
 <fieldset>
 <legend>Experimental options</legend>
 	<input type="button" id="showexperimentalstuff" name="showexperimentalstuff" value="There is no cow" >
 	<input type="button" id="slide" name="slide" value="slide" >
 	<input type="input" id="sb_text_input" name="sb_text_input" value="Visit us for more cool stuff." >
 </fieldset>
+</div>
 </form>
 </div>
 </body>
