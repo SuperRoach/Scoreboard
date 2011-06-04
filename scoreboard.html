@@ -1,0 +1,561 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Project Honeymoon</title>
+		<script type="text/javascript" src="lib/jquery/jquery-1.5.2.min.js"></script>
+		<script type="text/javascript" src="lib/marquee/jquery.marquee.js"></script>
+		<script type="text/javascript" src="lib/jqueryshortcutslibrary/jquery.shortcuts.min.js"></script>
+
+<script type="text/javascript">
+sending = false;
+
+$(document).ready(function(){
+$("#showscores").bind("click", function(e)
+	{
+		$("#showscores").addClass("recording")
+		$("#sb_content").show("fast");
+	})		
+	$("#hidescores").bind("click", function(e)
+	{
+		$("#showscores").removeClass("recording")
+		$("#sb_content").slideUp("medium");
+	})
+	$("#showexperimentalstuff").bind("click", function(e)
+	{
+		$("#sb_text_container").removeClass("experimental")
+	})
+	$("#slide").bind("click", function(e)
+	{
+		showtext();
+	})
+	$("#alternativetext").bind("click", function(e)
+	{
+		$("#sb_content .team_container").addClass("alternate");
+	})	
+	$("#originaltext").bind("click", function(e)
+	{
+		$("#sb_content .team_container").removeClass("alternate");
+	})	
+	$("#bumptext1").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump2,bump3").addClass("bump1");
+	})	
+	$("#bumptext2").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump1,bump3").addClass("bump2");
+	})	
+	$("#bumptext3").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump1,bump2").addClass("bump3");
+	})	
+	$("#originaltextpos").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump1");
+		$("#sb_content").removeClass("bump2");
+		$("#sb_content").removeClass("bump3");
+	})	
+
+	$("#sizebumptext1").bind("click", function(e)
+	{
+		$("#scoreboard").addClass("360p");
+	})	
+	$("#sizebumptext2").bind("click", function(e)
+	{
+		$("#scoreboard").addClass("720p");
+	})	
+	$("#originaltextsize").bind("click", function(e)
+	{
+		$("#scoreboard").removeClass("360p");
+		$("#scoreboard").removeClass("720p");
+	})	
+	$("#connect").bind("click", function(e)
+	{
+		switch($("input[name=connecttype]:checked").val())
+		{
+			case "send":
+			$(this).val("Connecting...");
+			//remotetimer = window.setInterval( "remoteinfo('send')", 5000 );
+			//clearInterval("remotetimer");
+			sending = true;
+			$("#scoreboard").addClass("recording")
+			$(".scorelabel").css("color", "#FF0000");
+			remoteinfo('send');
+			break;
+			case "receive":
+			$(this).val("Waiting first send");
+			remotetimer = window.setInterval( "remoteinfo('receive')", 5000);
+		}
+	
+		// Turn the darn thing off
+		$(this).attr("disabled",true)
+	})	
+
+	
+	
+	
+	$("input.score").bind("change", function(e)
+		{
+		
+		if (sending) 
+		{
+			remoteinfo('send');
+		}
+		
+		$("#showscores").removeClass("recording");
+			animate();
+		}
+		)		
+	$("input[name=bgtype]").bind("change", function(e)
+		{
+		switch(this.value)
+		{
+			case "none":
+			$("#scoreboard").removeClass("imagebg");
+			break;
+			case "standard":
+			$("#scoreboard").addClass("imagebg");
+		}
+		}
+		)	
+		
+	$("#bgcolor").bind("change", function(e)
+	{
+		var newcolor =  "#" + $("#bgcolor").val();
+		$("#scoreboard").css('backgroundColor', newcolor);
+	})	
+	
+	// KB Shortcuts
+	
+//    $(document).bind('keydown', 'Ctrl+c', function(){ alert('copy anyone?');});
+	
+	//$(document).bind('keydown', 'a', function() { increment("team1") });	
+	//$(document).bind('keydown', 'b', function() { increment("team2") });	
+/*	$(document).bind('keydown', 'control+shift+[', decrement("team1"))	
+	$(document).bind('keydown', 'control+shift+]', decrement("team2"))	
+*/
+});
+
+	$.Shortcuts.add({
+	type: 'down',
+	mask: 'Ctrl+Left',
+	handler: function()	{	increment("team1"); remoteinfo('send'); animate(); } }
+	);
+	
+	$.Shortcuts.add({
+	type: 'down',
+	mask: 'Ctrl+Right',
+	handler: function()	{	increment("team2"); remoteinfo('send'); animate(); } }
+	);
+		
+	$.Shortcuts.add({
+	type: 'down',
+	mask: 'Ctrl+Shift+Left',
+	handler: function()	{	decrement("team1"); remoteinfo('send'); animate(); } }
+	);
+	
+	$.Shortcuts.add({
+	type: 'down',
+	mask: 'Ctrl+Shift+Right',
+	handler: function()	{	decrement("team2"); remoteinfo('send'); animate(); } }
+	);
+	
+	$.Shortcuts.start();
+
+function increment(team)
+{
+	var tempval = ($("#"+team+"score").val()*1) + 1;
+	$("#"+team+"score").val(tempval)
+	//animate();
+}
+
+
+function decrement(team)
+{
+	var tempval = ($("#"+team+"score").val()*1) - 1;
+	$("#"+team+"score").val(tempval)
+}
+
+function showtext()
+{
+    var scrollertext = $("#sb_text_input").val();
+    var newscroll = '<marquee id="sb_text" loop=1 scrollamount=2>'+scrollertext+'</marquee>';
+// You can try queuing it up with $("#sb_team1_score").marquee({"loop": "1"});  ... however fix the hardcoding.
+$("#sb_text_container").removeClass("experimental");
+$("#sb_text_container").empty();
+$("#sb_text_container").append(newscroll);
+$("#sb_text_container").not(":animated").slideDown("fast");
+$("#sb_text").marquee();
+
+	
+}
+
+function removescroller()
+{
+$("#sb_text_container").slideUp("fast");
+}
+
+function animate()
+{
+
+	// Globals
+	var delaytime = $("#delaytime").val()
+
+
+	var team2_score = $("#team2score").val()
+	$("#sb_team2_score").html(team2_score)
+
+	var team1_score = $("#team1score").val()
+	$("#sb_team1_score").html(team1_score)
+
+	var team1_name = $("#team1name").val()
+	$("#sb_team1_name").html(team1_name)
+	var team2_name = $("#team2name").val()
+	$("#sb_team2_name").html(team2_name)
+
+//	$("#sb_content").show("slow").delay(delaytime).hide("slow")
+	$("#sb_content").not(":animated").slideDown("slow").delay(delaytime).slideUp("slow")
+
+
+}
+
+function remoteinfo(type)
+{
+switch (type)
+{
+case "receive":
+	$.getJSON('scdata.php', function(json) {
+	   var team1score = $("#team1score").val()
+	   var team2score = $("#team2score").val()
+	   if ( (json.team1score != team1score) || (json.team2score != team2score) )
+	   {
+		$("#team1score").val(json.team1score);
+		$("#team2score").val(json.team2score);
+		animate();
+	   }
+	   
+	});
+break;
+case "send":
+if (sending) {
+  var team1score = $("#team1score").val()
+  var team2score = $("#team2score").val()
+	var currentdate  = new Date()
+
+  // fucking hacks.
+	senddata = 'team1score='+team1score+'&team2score='+team2score+'&action=fuckingyeah'
+	$.ajax({
+		url:'updatescoreboard.php',
+		data: senddata,
+		success: function(){
+		$("#connect").val("Connected, got an update!");
+		},
+		type:'post'
+	})
+
+	datestring = currentdate.getHours() + ":" + currentdate.getMinutes() + " " + currentdate.getSeconds() +"s";	
+	
+    $("#connect").val("Sent Stuff at " + datestring);
+	}
+}
+}
+
+</script>
+<style type="text/css">
+
+#scoreboard {
+background:#00FF00 /* alpha map me */
+}
+
+#scoreboard {
+width:320px;
+height:180px;
+border:1px solid black;
+}
+
+.360p
+{
+width:640px !important;
+height:360px !important;
+}
+
+.720p
+{
+width:1280px !important;
+height:720px !important;
+background:blue !important;
+border:2px solid pink;
+}
+
+.score
+{
+width:50px;
+}
+
+.teamname
+{
+width: 150px
+}
+
+.nameformatting
+{
+width:180px;
+}
+label { 
+font-weight:bold
+}
+
+.recording 
+{
+border: 1px solid red !important;
+}
+
+.sb_name {
+		letter-spacing:-.8px;
+		font-size:140%;
+		font-family:verdana;
+		/*Is there a font stroke thing for it that I can use :p*/
+		/* Mac hack */
+		-webkit-font-smoothing:none;
+		color:#D12C10;
+		}
+
+.sb_score {
+	font-family:verdana;
+	font-size:170%;
+	color:#675E55;
+	/* Mac hack */
+	-webkit-font-smoothing:none;
+}
+
+#teamdata
+{
+width:55%
+}
+
+.team_container
+{
+width:150px
+}
+
+#sb_team1_container,#sb_team2_container
+{
+padding:5px;
+}
+
+
+#sb_team2_container
+{
+float:right;
+}
+
+#sb_team1_container
+{
+float:left;
+}
+.sb_score, .sb_name
+{
+/*text-shadow: 2px 2px white;*/
+text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white
+}
+
+#sb_text
+{
+font-weight:bold;
+font-size:1.4em;
+}
+
+.experimental
+{
+display:none !important;
+}
+
+.alternate .sb_name
+{
+color:#22CCFF;
+letter-spacing:1px;
+font-weight:bold;
+font-size:22px;
+text-shadow: 1px 1px #222222, -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+}
+
+.alternate .sb_score
+{
+text-shadow: 1px 1px #1022FF;
+color:#FFF;
+font-family:arial;
+}
+'
+
+.bump1
+{
+margin-top:5%;
+}
+
+.bump2
+{
+margin-top:10%;
+}
+
+.bump3
+{
+margin-top:25%;
+}
+
+/* Image background method */
+.imagebg #sb_team1_container
+{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("images/leftslider.png");
+    background-origin: padding-box;
+    background-position: -60px 50%;
+    background-repeat: no-repeat;
+    background-size: 130% auto;
+}
+
+.imagebg #sb_team2_container
+{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("images/rightslider.png");
+    background-origin: padding-box;
+    background-position: 30px 50%;
+    background-repeat: no-repeat;
+    background-size: 130% auto;
+}
+
+.imagebg #sb_team2_name, .imagebg #sb_team2_score
+{
+text-align:right;
+}
+
+.imagebg #sb_team2_name, .imagebg #sb_team2_score
+{
+}
+
+
+#scoreboard.imagebg .sb_score, #scoreboard.imagebg .sb_name
+{ text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black }
+
+#remoteid 
+{
+width:30px;
+}
+
+
+#sb_text
+{
+ height:25px;   
+padding:3px;
+
+font-family:verdana;
+font-size:1.2em;
+font-weight:normal;
+letter-spacing:-.8px;
+text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+
+#sb_text_container
+{
+    clear:both;
+	background:white;
+}
+</style>
+</head>
+<body>
+<h1>Project honeymoon</h1>
+<p>A project to help with dynamic scoreboards.</p>
+<p>To use, screen region the green backgrounded area, then chromakey it out.</p>
+<div id="scoreboard">
+	<div id="sb_content">
+		<div id="sb_team1_container" class="team_container">
+			<div id="sb_team1_name" class="sb_name">
+			Team 1
+			</div>
+			<div id="sb_team1_score" class="sb_score">
+			15
+			</div>
+		</div>		
+		<div id="sb_team2_container" class="team_container">
+			<div id="sb_team2_name" class="sb_name">
+			Team 2
+			</div>
+			<div id="sb_team2_score" class="sb_score">
+			141
+			</div>
+		</div>
+		</div>
+	<div id="sb_text_container" class="experimental">
+		<marquee id="sb_text" loop=12>
+		Content
+		</marquee>
+	</div>		
+</div>
+<div id="teamdata">
+<form name="teamdata" action="post">
+<label for="team1score" class="scorelabel">Team 1 score: </label>
+<input type="text" id="team1score" name="team1score" class="score" value="0" >
+<label for="team2score" class="scorelabel">Team 2 score: </label>
+<input type="text" id="team2score" name="team2score" class="score" value="0" >
+<div class="nameformatting">
+<label for="team1name">Team 1 name: </label>
+<input type="text" id="team1name" name="team1name" class="teamname" value="Randoms" >
+<label for="team2name">Team 2 name: </label>
+<input type="text" id="team2name" name="team2name" class="teamname" value="H*EA*T" >
+</div>
+</form>
+<form name="teamoptions" action="post">
+<fieldset>
+<legend>Delays and show/hide</legend>
+<label for="delaytime">Delay time (in milliseconds - 1000 = 1 second): </label>
+<input type="text" id="delaytime" name="delaytime" class="delaytime" value="1800" >
+<input type="button" id="showscores" name="showscores" value="Show scoreboard till next change" >
+<input type="button" id="hidescores" name="hidescores" value="Hide scoreboard now" >
+</fieldset>
+<fieldset>
+<legend>Text formatting</legend>
+	<input type="button" id="originaltext" name="originaltext" value="Original Text Format" >
+	<input type="button" id="alternativetext" name="alternativetext" value="Alternative Text" >
+	</fieldset>
+<fieldset>
+<legend>Text position</legend>	
+	<input type="button" id="originaltextpos" name="originaltext" value="Original Position" >
+	<input type="button" id="bumptext1" name="bump1" value="Bump1" >
+	<input type="button" id="bumptext2" name="bump2" value="Bump2" >
+	<input type="button" id="bumptext3" name="bump3" value="Bump3" >
+</fieldset>
+<fieldset>
+<legend>Text size</legend>
+	<input type="button" id="originaltextsize" name="originaltextsize" value="Original Size" >
+	<input type="button" id="sizebumptext1" name="sizebump1" value="360p" >
+	<input type="button" id="sizebumptext2" name="sizebump2" value="720p" >
+</fieldset>
+<fieldset>
+<legend>Background color</legend>
+	<label for="bgcolor">In HEX (RRGGBB)</label><input type="text" id="bgcolor" name="bgcolor" value="00FF00" maxlength=6 >
+</fieldset>
+<fieldset>
+<legend>Background type</legend>
+	<input type="radio" checked name="bgtype" id="bgtype_none" value="none"> <label for="bgtype_none">None</label>
+	<input type="radio" name="bgtype" id="bgtype_standard" value="standard"> <label for="bgtype_standard">Standard</label>
+</fieldset>
+<fieldset>
+<legend>Remote updates</legend>
+	<label for="bgcolor">Remote partner id: </label><input type="text" id="remoteid" name="delaytime" class="delaytime" maxlength=3 >
+	<input type="button" id="connect" name="connect" value="Connect" >
+	<input type="radio" checked name="connecttype" id="connecttype_send" value="send"> <label for="connecttype_send">Send</label>
+	<input type="radio" name="connecttype" id="connecttype_receive" value="receive"> <label for="connecttype_receive">Receive</label>
+</fieldset>
+<fieldset>
+<legend>Experimental options</legend>
+	<input type="button" id="showexperimentalstuff" name="showexperimentalstuff" value="There is no cow" >
+	<input type="button" id="slide" name="slide" value="slide" >
+	<input type="input" id="sb_text_input" name="sb_text_input" value="Visit us for more cool stuff." >
+</fieldset>
+</form>
+</div>
+</body>
+</html>
