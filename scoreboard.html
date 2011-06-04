@@ -62,23 +62,27 @@ $("#showscores").bind("click", function(e)
 	})	
 	$("#bumptext1").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump2 bump3 bump4 bump5").addClass("bump1");
+		$("#sb_content").removeClass("bump2 bump3 bump4 bump5 bump6").addClass("bump1");
 	})	
 	$("#bumptext2").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump1 bump3 bump4 bump5").addClass("bump2");
+		$("#sb_content").removeClass("bump1 bump3 bump4 bump5 bump6").addClass("bump2");
 	})	
 	$("#bumptext3").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump1 bump2 bump4 bump5").addClass("bump3");
+		$("#sb_content").removeClass("bump1 bump2 bump4 bump5 bump6").addClass("bump3");
 	})	
 	$("#bumptext4").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump1 bump3 bump2").addClass("bump4");
+		$("#sb_content").removeClass("bump1 bump3 bump2 bump5 bump6").addClass("bump4");
 	})		
 	$("#bumptext5").bind("click", function(e)
 	{
-		$("#sb_content").removeClass("bump1 bump3 bump2 bump4").addClass("bump5");
+		$("#sb_content").removeClass("bump1 bump3 bump2 bump4 bump6").addClass("bump5");
+	})			
+	$("#bumptext6").bind("click", function(e)
+	{
+		$("#sb_content").removeClass("bump1 bump3 bump2 bump4 bump5").addClass("bump6");
 	})	
 	$("#originaltextpos").bind("click", function(e)
 	{
@@ -144,10 +148,13 @@ $("#showscores").bind("click", function(e)
 		switch(this.value)
 		{
 			case "none":
-			$("#scoreboard").removeClass("imagebg");
+			$("#scoreboard").removeClass("imagebg standard");
 			break;
 			case "standard":
-			$("#scoreboard").addClass("imagebg");
+			$("#scoreboard").removeClass("imagebg").addClass("standardbg");
+			break;
+			case "image":
+			$("#scoreboard").removeClass("standardbg").addClass("imagebg");
 		}
 		}
 		)	
@@ -421,7 +428,7 @@ display:none !important;
 color:#22CCFF;
 letter-spacing:1px;
 font-weight:bold;
-font-size:22px;
+font-size:20px;
 text-shadow: 1px 1px #222222, -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
 }
 
@@ -479,12 +486,26 @@ margin-top:25%;
 
 .bump4
 {
-margin-top:29%;
+margin-top:30%;
 }
 
 .bump5
 {
-margin-top:33%;
+margin-top:32%;
+}
+
+.bump6
+{
+margin-top:37%;
+}
+
+.standardbg #sb_team1_name, .standardbg #sb_team2_name
+{
+    background:black;
+}
+
+.standardbg #sb_team1_score, .standardbg #sb_team2_score {
+background:black;
 }
 
 
@@ -652,6 +673,7 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 		<input type="button" id="bumptext3" name="bump3" value="Bump3" >
 		<input type="button" id="bumptext4" name="bump4" value="Bump4" >
 		<input type="button" id="bumptext5" name="bump5" value="Bump5" >
+		<input type="button" id="bumptext6" name="bump6" value="Bump6" >
 	</fieldset>
 </div>
 <div id="tabs-background">
@@ -665,6 +687,7 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	<legend>Background type</legend>
 		<input type="radio" checked name="bgtype" id="bgtype_none" value="none"> <label for="bgtype_none">None</label>
 		<input type="radio" name="bgtype" id="bgtype_standard" value="standard"> <label for="bgtype_standard">Standard</label>
+		<input type="radio" name="bgtype" id="bgtype_image" value="image"> <label for="bgtype_image">Image</label>
 	</fieldset>
 </div>
 <div id="tabs-remoteupdate">
