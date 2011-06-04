@@ -10,17 +10,26 @@
 
 <script type="text/javascript">
 sending = false;
+ScoreAlwaysVisible = false;
 
 $(document).ready(function(){
 $("#teamdata").tabs();
 $("#showscores").bind("click", function(e)
 	{
+		ScoreAlwaysVisible = false;
 		$("#showscores").addClass("recording")
 		$("#sb_content").show("fast");
-	})		
+	})
+	$("#showforever").bind("click", function(e)
+	{
+		ScoreAlwaysVisible = true;
+		$("#showscores").addClass("recording")
+		$("#sb_content").show("fast");
+	})	
 	$("#hidescores").bind("click", function(e)
 	{
-		$("#showscores").removeClass("recording")
+		ScoreAlwaysVisible = false;
+		$("#showscores").removeClass("recording");
 		$("#sb_content").slideUp("medium");
 	})
 	$("#showexperimentalstuff").bind("click", function(e)
@@ -60,16 +69,16 @@ $("#showscores").bind("click", function(e)
 
 	$("#sizebumptext1").bind("click", function(e)
 	{
-		$("#scoreboard").addClass("360p");
+		$("#scoreboard").removeClass("res720p").addClass("res360p");
 	})	
 	$("#sizebumptext2").bind("click", function(e)
 	{
-		$("#scoreboard").addClass("720p");
+		$("#scoreboard").removeClass("res360p").addClass("res720p");
 	})	
 	$("#originaltextsize").bind("click", function(e)
 	{
-		$("#scoreboard").removeClass("360p");
-		$("#scoreboard").removeClass("720p");
+		$("#scoreboard").removeClass("res360p");
+		$("#scoreboard").removeClass("res720p");
 	})	
 	$("#connect").bind("click", function(e)
 	{
@@ -216,9 +225,13 @@ function animate()
 	$("#sb_team2_name").html(team2_name)
 
 //	$("#sb_content").show("slow").delay(delaytime).hide("slow")
+if (!ScoreAlwaysVisible)
+	{
 	$("#sb_content").not(":animated").slideDown("slow").delay(delaytime).slideUp("slow")
-
-
+	}
+	else {
+	$("#sb_content").not(":animated").slideDown("slow").delay(delaytime)
+	}
 }
 
 function remoteinfo(type)
@@ -275,18 +288,16 @@ height:180px;
 border:1px solid black;
 }
 
-.360p
+.res360p
 {
 width:640px !important;
 height:360px !important;
 }
 
-.720p
+.res720p
 {
 width:1280px !important;
 height:720px !important;
-background:blue !important;
-border:2px solid pink;
 }
 
 .score
@@ -387,7 +398,6 @@ text-shadow: 1px 1px #1022FF;
 color:#FFF;
 font-family:arial;
 }
-'
 
 .bump1
 {
@@ -501,9 +511,9 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	<ul>
 		<li><a href="#tabs-scores">Team/Scores</a></li>
 		<li><a href="#tabs-delay">Delay</a></li>
+		<li><a href="#tabs-textsize">Board Size</a></li>
 		<li><a href="#tabs-textformatting">Text Format</a></li>
-		<li><a href="#tabs-textsize">Text Position</a></li>
-		<li><a href="#tabs-textposition">Text Size</a></li>
+		<li><a href="#tabs-textposition">Text Position</a></li>
 		<li><a href="#tabs-textbackground">Text Background</a></li>
 		<li><a href="#tabs-background">BG Color</a></li>
 		<li><a href="#tabs-remoteupdate">Remote Updates</a></li>
@@ -530,9 +540,19 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	<label for="delaytime">Delay time (in milliseconds - 1000 = 1 second): </label>
 	<input type="text" id="delaytime" name="delaytime" class="delaytime" value="1800" >
 	<input type="button" id="showscores" name="showscores" value="Show scoreboard till next change" >
+	<input type="button" id="showforever" name="showforever" value="Show scoreboard forever" >
 	<input type="button" id="hidescores" name="hidescores" value="Hide scoreboard now" >
 	</fieldset>
 </div>
+<div id="tabs-textsize">
+	<fieldset>
+	<legend>Board size</legend>
+		<input type="button" id="originaltextsize" name="originaltextsize" value="Original Size" >
+		<input type="button" id="sizebumptext1" name="sizebump1" value="360p" >
+		<input type="button" id="sizebumptext2" name="sizebump2" value="720p" >
+	</fieldset>
+</div>
+
 <div id="tabs-textformatting">
 <fieldset>
 <legend>Text formatting</legend>
@@ -549,14 +569,6 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 		<input type="button" id="bumptext3" name="bump3" value="Bump3" >
 	</fieldset>
 </div>
-<div id="tabs-textsize">
-	<fieldset>
-	<legend>Text size</legend>
-		<input type="button" id="originaltextsize" name="originaltextsize" value="Original Size" >
-		<input type="button" id="sizebumptext1" name="sizebump1" value="360p" >
-		<input type="button" id="sizebumptext2" name="sizebump2" value="720p" >
-	</fieldset>
-</div>
 <div id="tabs-background">
 <fieldset>
 <legend>Background color</legend>
@@ -564,11 +576,12 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 </fieldset>
 </div>
 <div id="tabs-textbackground">
-<fieldset>
-<legend>Background type</legend>
-	<input type="radio" checked name="bgtype" id="bgtype_none" value="none"> <label for="bgtype_none">None</label>
-	<input type="radio" name="bgtype" id="bgtype_standard" value="standard"> <label for="bgtype_standard">Standard</label>
-</fieldset>
+	<fieldset>
+	<legend>Background type</legend>
+		<input type="radio" checked name="bgtype" id="bgtype_none" value="none"> <label for="bgtype_none">None</label>
+		<input type="radio" name="bgtype" id="bgtype_standard" value="standard"> <label for="bgtype_standard">Standard</label>
+	</fieldset>
+</div>
 <div id="tabs-remoteupdate">
 <fieldset>
 <legend>Remote updates</legend>
@@ -582,7 +595,7 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 <fieldset>
 <legend>Experimental options</legend>
 	<input type="button" id="showexperimentalstuff" name="showexperimentalstuff" value="There is no cow" >
-	<input type="button" id="slide" name="slide" value="slide" >
+	<input type="button" id="slide" name="slide" value="slide" ><br>
 	<input type="input" id="sb_text_input" name="sb_text_input" value="Visit us for more cool stuff." >
 </fieldset>
 </div>
