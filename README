@@ -1,0 +1,8 @@
+The Scoreboard is a more open way of being able to insert titling on live productions, as long as you have a method of Chromakeying it out in order to allow it to overlay on your live production. Currently this means you will need to screencapture the Coloured section.
+
+It's being created with Live Gaming Commentaries in Mind, and has the main features being developed:
+
+- Scoring of two teams
+- Sliding text
+
+Also eventually to be uploaded, is remote access, which is to allow the scoreboard act as either a slave or master to someone else, and receive or send updates from one machine or another. This is intended to allow the workload to be shifted to other people once you have the item set up.
