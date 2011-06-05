@@ -14,6 +14,16 @@ ScoreAlwaysVisible = false;
 
 $(document).ready(function(){
 $("#teamdata").tabs();
+$("#sb_content").draggable();
+
+	$("#team1inc").bind("click", function(e)
+	{
+	increment("team1"); remoteinfo('send'); animate();
+	})	
+	$("#team2inc").bind("click", function(e)
+	{
+	increment("team2"); remoteinfo('send'); animate();
+	})	
 $("#showscores").bind("click", function(e)
 	{
 		ScoreAlwaysVisible = false;
@@ -42,11 +52,15 @@ $("#showscores").bind("click", function(e)
 	})
 	$("#alternativetext").bind("click", function(e)
 	{
-		$("#sb_content .team_container").addClass("alternate");
+		$("#sb_content .team_container").removeClass("hicontrast").addClass("alternate");
 	})	
 	$("#originaltext").bind("click", function(e)
 	{
-		$("#sb_content .team_container").removeClass("alternate");
+		$("#sb_content .team_container").removeClass("alternate hicontrast");
+	})	
+	$("#hicontrast").bind("click", function(e)
+	{
+		$("#sb_content .team_container").removeClass("alternate").addClass("hicontrast");
 	})	
 	$("#linear").bind("click", function(e)
 	{
@@ -148,7 +162,7 @@ $("#showscores").bind("click", function(e)
 		switch(this.value)
 		{
 			case "none":
-			$("#scoreboard").removeClass("imagebg standard");
+			$("#scoreboard").removeClass("imagebg standardbg");
 			break;
 			case "standard":
 			$("#scoreboard").removeClass("imagebg").addClass("standardbg");
@@ -169,7 +183,7 @@ $("#showscores").bind("click", function(e)
 	
 //    $(document).bind('keydown', 'Ctrl+c', function(){ alert('copy anyone?');});
 	
-	//$(document).bind('keydown', 'a', function() { increment("team1") });	
+	//$(document).bind('keydown', 'a', function() { `ment("team1") });	
 	//$(document).bind('keydown', 'b', function() { increment("team2") });	
 /*	$(document).bind('keydown', 'control+shift+[', decrement("team1"))	
 	$(document).bind('keydown', 'control+shift+]', decrement("team2"))	
@@ -320,6 +334,17 @@ height:180px;
 border:1px solid black;
 }
 
+/* set reasonable margins to allow for alignment */
+#sb_team2_name, #sb_team1_name
+{ min-width:70px; }
+
+#sb_team1_score, #sb_team2_score
+{ min-width:30px; }
+
+.linear1 #sb_team2_name, .linear1 #sb_team1_name
+{ min-width:100px; }
+
+
 .res360p
 {
 width:640px !important;
@@ -339,7 +364,7 @@ width:50px;
 
 .teamname
 {
-width: 150px
+width: 150px; /* or 45% */
 }
 
 .nameformatting
@@ -357,7 +382,7 @@ border: 1px solid red !important;
 
 .sb_name {
 		letter-spacing:-.8px;
-		font-size:140%;
+		font-size:130%;
 		font-family:verdana;
 		/*Is there a font stroke thing for it that I can use :p*/
 		/* Mac hack */
@@ -367,7 +392,7 @@ border: 1px solid red !important;
 
 .sb_score {
 	font-family:verdana;
-	font-size:170%;
+	font-size:130%;
 	color:#675E55;
 	/* Mac hack */
 	-webkit-font-smoothing:none;
@@ -385,10 +410,15 @@ width:100%;
 top:80%;
 }
 
+.linear1.team_container
+{
+width:60%;
+}
+
 
 .team_container
 {
-width:150px
+width:45%
 }
 
 #sb_team1_container,#sb_team2_container
@@ -423,12 +453,29 @@ font-size:1.4em;
 display:none !important;
 }
 
+.hicontrast .sb_name
+{
+color:#FFF;
+letter-spacing:1px;
+font-weight:bold;
+font-size:16px;
+text-shadow: 1px 1px #222222, -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+}
+
+.hicontrast .sb_score
+{
+text-shadow: 1px 1px #000;
+color:#FFF;
+font-family:arial;
+font-size:18px;
+}
+
 .alternate .sb_name
 {
 color:#22CCFF;
 letter-spacing:1px;
 font-weight:bold;
-font-size:20px;
+font-size:16px;
 text-shadow: 1px 1px #222222, -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
 }
 
@@ -437,6 +484,7 @@ text-shadow: 1px 1px #222222, -1px 0 black, 0 1px black, 1px 0 black, 0 -1px bla
 text-shadow: 1px 1px #1022FF;
 color:#FFF;
 font-family:arial;
+font-size:18px;
 }
 
 #sb_team2_container.linear1
@@ -467,17 +515,11 @@ font-family:arial;
     float:left;
 }
 
-
-
 .bump1
-{
-margin-top:5%;
-}
+{margin-top:5%;}
 
 .bump2
-{
-margin-top:10%;
-}
+{margin-top:10%;}
 
 .bump3
 {
@@ -485,19 +527,13 @@ margin-top:25%;
 }
 
 .bump4
-{
-margin-top:30%;
-}
+{margin-top:30%;}
 
 .bump5
-{
-margin-top:32%;
-}
+{margin-top:32%;}
 
 .bump6
-{
-margin-top:37%;
-}
+{margin-top:37%;}
 
 .standardbg #sb_team1_name, .standardbg #sb_team2_name
 {
@@ -621,6 +657,10 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 	<input type="text" id="team1score" name="team1score" class="score" value="0" >
 	<label for="team2score" class="scorelabel">Team 2 score: </label>
 	<input type="text" id="team2score" name="team2score" class="score" value="0" >
+	<div class="scorebuttons">
+	<input type="button" id="team1inc" name="team1inc" value="team1+" >
+	<input type="button" id="team2inc" name="team2inc" value="team2+" >
+	</div>
 	<div class="nameformatting">
 	<label for="team1name">Team 1 name: </label>
 	<input type="text" id="team1name" name="team1name" class="teamname" value="Randoms" >
@@ -654,6 +694,7 @@ text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 <legend>Text Style</legend>
 	<input type="button" id="originaltext" name="originaltext" value="Original Text Format" >
 	<input type="button" id="alternativetext" name="alternativetext" value="Alternative Text" >
+	<input type="button" id="hicontrast" name="hicontrast" value="High Contrast Text" >
 </fieldset>
 </div>
 <div id="tabs-textformatting">
